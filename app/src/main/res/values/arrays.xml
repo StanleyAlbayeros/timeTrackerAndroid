@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="createActivityList">
+        <item>@string/createProject</item>
+        <item>@string/createBasicTask</item>
+        <item>@string/createDeadlineTask</item>
+    </string-array>
+    <string-array name="createActivityListSpinnerValues">
+        <item>Project</item>
+        <item>BasicTask</item>
+        <item>DeadlineTask</item>
+    </string-array>
+</resources>

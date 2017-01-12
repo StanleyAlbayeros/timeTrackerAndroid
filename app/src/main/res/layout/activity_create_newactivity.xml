@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:id="@+id/CreateActivityLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/TextViewTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_activity"
+            android:textSize="10pt">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/CreateActivityNameTextField"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:hint="@string/createActivityName"
+            android:inputType="text">
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/CreateActivityDescriptionTextField"
+            android:inputType="textMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:hint="@string/createActivityDescription"
+            android:lines="3">
+
+        </EditText>
+
+        <DatePicker
+            android:id="@+id/DeadlineDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal">
+
+        </DatePicker>
+
+        <TimePicker
+            android:id="@+id/DeadlineTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TimePicker>
+
+        <Spinner
+            android:id="@+id/CreateActivityTypeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:entries="@array/createActivityList"
+            android:gravity="center_vertical"
+            android:prompt="@string/create_activity">
+
+        </Spinner>
+
+        <Button
+            android:id="@+id/CreateActivityButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/createActivitySubmit">
+
+        </Button>
+    </LinearLayout>
+</RelativeLayout>
