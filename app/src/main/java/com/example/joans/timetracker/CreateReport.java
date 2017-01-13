@@ -63,6 +63,7 @@ public class CreateReport extends AppCompatActivity implements AdapterView.OnIte
         public final void onReceive(final Context context, final Intent intent) {
             Log.d(tag, "onReceive From createactivity");
             if (intent.getAction().equals(GestorArbreActivitats.CREATE_REPORT_DONE)) {
+                
                 String myReport = new String();
                 myReport = intent.getStringExtra("reportContent");
 
