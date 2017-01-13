@@ -4,11 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <WebView
+    <LinearLayout
+        android:id="@+id/CreateReportLinearLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <Spinner
+            android:id="@+id/CreateReportTypeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:entries="@array/createReportList"
+            android:gravity="center_vertical"
+            android:prompt="@string/create_Report">
+
+        </Spinner>
+
+        <WebView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
         android:id="@+id/reportWebField"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true">
+
+        </WebView>
+
+
+    </LinearLayout>
 
 </ScrollView>

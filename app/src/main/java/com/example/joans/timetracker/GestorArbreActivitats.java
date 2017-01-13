@@ -31,6 +31,7 @@ Veure comentari de la classe Actualitzador
 import nucli.Clock;
 import nucli.Task;
 import nucli.TimePeriod;
+import reports.AdvancedReport;
 import reports.Formatting;
 import reports.HtmlFormatting;
 import reports.Report;
@@ -519,57 +520,88 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
                 createNewActivity(newActivityType, newActivityName, newActivityDescription, deadline);
 
             } else if (accio.equals(CreateReport.CREATE_REPORT)) {
-                createReport();
+                createReport(intent.getStringExtra("reportType"));
             } else {
                 Log.d(tag, "accio desconeguda!");
             }
             Log.d(tag, "final de onReceive");
         }
 
-        private void createReport() {
+        private void createReport(String reportType) {
 //TODO a real switch case with putextras from the createreport screen
-/*
-            String reportContent = new String();
-            Formatting txt;
-            try {
-                txt = new TxtFormatting("le");
-                String reportTitle = "project report";
-                Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
-                        reportTitle,
-                        ((Project) currentFatherActivity).getActivityList());
-
-                reportContent = txtReport.writeReport(txt);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            Intent answer = new Intent(CreateReport.CREATE_REPORT_DONE);
-            answer.putExtra("reportContent", reportContent);
-            sendBroadcast(answer);
-
-        }
-
-         */
 
             String reportContent = new String();
-            Formatting txt;
-            try {
-                Formatting html = new HtmlFormatting("no");
-                String reportTitle = "simple project report";
-                Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
-                        reportTitle,
-                        ((Project) currentFatherActivity).getActivityList());
+            Formatting reportFormatting;
+            Intent answer = new Intent(CreateReport.CREATE_REPORT_DONE);
+            switch (reportType) {
+                case "simpleTXT":
+                    try {
+                        reportFormatting = new TxtFormatting("txt");
+                        String reportTitle = "";
+                        Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
+                                reportTitle,
+                                ((Project) currentFatherActivity).getActivityList());
 
-                reportContent = txtReport.writeReport(html);
+                        reportContent = txtReport.writeReport(reportFormatting);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    answer.putExtra("reportContent", reportContent);
+                    break;
+                case "simpleHTML":
+                    try {
+                        Formatting html = new HtmlFormatting("html");
+                        String reportTitle = "";
+                        Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
+                                reportTitle,
+                                ((Project) currentFatherActivity).getActivityList());
 
-                System.out.println(reportContent);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                        reportContent = txtReport.writeReport(html);
+
+                        System.out.println(reportContent);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    answer.putExtra("reportContent", reportContent);
+                    break;
+                case "advTXT":
+                    try {
+                        reportFormatting = new TxtFormatting("txt");
+                        String reportTitle = "";
+                        Report txtReport = new AdvancedReport(((Project) currentFatherActivity),
+                                reportTitle,
+                                ((Project) currentFatherActivity).getActivityList());
+
+                        reportContent = txtReport.writeReport(reportFormatting);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    answer.putExtra("reportContent", reportContent);
+                    break;
+                case "advHTML":
+                    try {
+                        Formatting html = new HtmlFormatting("html");
+                        String reportTitle = "";
+                        Report txtReport = new AdvancedReport(((Project) currentFatherActivity),
+                                reportTitle,
+                                ((Project) currentFatherActivity).getActivityList());
+
+                        reportContent = txtReport.writeReport(html);
+
+                        System.out.println(reportContent);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    answer.putExtra("reportContent", reportContent);
+                    break;
+                default:
+
+                    break;
+
             }
 
-            Intent answer = new Intent(CreateReport.CREATE_REPORT_DONE);
-            answer.putExtra("reportContent", reportContent);
             sendBroadcast(answer);
+
 
         }
     }

@@ -11,4 +11,8 @@
     <string name="createBasicTask">Basic Task</string>
     <string name="createDeadlineTask">Activity with Deadline</string>
     <string name="taskDeadline">Task Deadline</string>
+    <string name="createSimpleTXT">Simple Text</string>
+    <string name="createSimpleHTML">Simple HTML</string>
+    <string name="createAdvancedTXT">Advanced Text</string>
+    <string name="createAdvancedHTML">Advanced HTML</string>
 </resources>

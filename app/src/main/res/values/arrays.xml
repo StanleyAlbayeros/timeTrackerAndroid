@@ -10,4 +10,18 @@
         <item>BasicTask</item>
         <item>DeadlineTask</item>
     </string-array>
+
+    <string-array name="createReportList">
+        <item>@string/createSimpleTXT</item>
+        <item>@string/createSimpleHTML</item>
+        <item>@string/createAdvancedTXT</item>
+        <item>@string/createAdvancedHTML</item>
+    </string-array>
+    <string-array name="createReportListSpinnerValues">
+        <item>simpleTXT</item>
+        <item>simpleHTML</item>
+        <item>advTXT</item>
+        <item>advHTML</item>
+    </string-array>
+
 </resources>
