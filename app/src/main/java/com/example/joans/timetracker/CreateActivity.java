@@ -18,6 +18,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static com.example.joans.timetracker.R.string.deadline;
 
 /**
  * Created by Vernon on 12/01/2017.
@@ -49,6 +54,7 @@ public class CreateActivity extends AppCompatActivity implements AdapterView.OnI
         activityTypeSpinner = (Spinner) findViewById(R.id.CreateActivityTypeSpinner);
         deadlineDate = (DatePicker) findViewById(R.id.DeadlineDate);
         deadlineTime = (TimePicker) findViewById(R.id.DeadlineTime);
+
         deadlineTime.setVisibility(View.GONE);
         deadlineDate.setVisibility(View.GONE);
 
@@ -102,7 +108,12 @@ public class CreateActivity extends AppCompatActivity implements AdapterView.OnI
 
         public void onClick(View v) {
             //createActivity();
-
+            Calendar calendar = new GregorianCalendar(deadlineDate.getYear(),
+                    deadlineDate.getMonth(),
+                    deadlineDate.getDayOfMonth(),
+                    deadlineTime.getCurrentHour(),
+                    deadlineTime.getCurrentMinute());
+            long newActivityDeadline = calendar.getTimeInMillis();
 
             Log.d(tag, "Starting createnewactrivity() from createactivity");
 
@@ -130,8 +141,15 @@ public class CreateActivity extends AppCompatActivity implements AdapterView.OnI
                     break;
                 case "DeadlineTask":
 
+                    createActivityIntent.putExtra("newActivityName", newActivityName);
+                    createActivityIntent.putExtra("newActivityDescription", newActivityDescription);
+                    createActivityIntent.putExtra("newActivityType", newActivityType);
+                    createActivityIntent.putExtra("newActivityDeadline", newActivityDeadline);
                     Log.d(tag, "new activity name: " + newActivityName);
                     Log.d(tag, "new activity type: " + newActivityType);
+                    Date tmp = new Date();
+                    tmp.setTime(newActivityDeadline);
+                    Log.d(tag, "deadline task has a deadline in: " + tmp.toString());
                     break;
                 default:
                     break;
@@ -142,48 +160,14 @@ public class CreateActivity extends AppCompatActivity implements AdapterView.OnI
 
     private Receptor receptor;
 
-    private void createActivity() {
-
-        Intent createActivityIntent = new Intent(GestorArbreActivitats.CREATE_ACTIVITY);
-
-        String newActivityName = newActivityNameField.getText().toString();
-        String newActivityDescription = newActivityDescriptionField.getText().toString();
-        int activitySpinnerIndex = activityTypeSpinner.getSelectedItemPosition();
-        String[] size_values = getResources().getStringArray(R.array.createActivityListSpinnerValues);
-        String newActitivtyType = size_values[activitySpinnerIndex];
-
-        switch (newActitivtyType) {
-            case "Project":
-                createActivityIntent.putExtra("newActivityName", newActivityName);
-                createActivityIntent.putExtra("newActivityDescription", newActivityDescription);
-                createActivityIntent.putExtra("newActitivtyType", newActitivtyType);
-                Log.d(tag, "new activity name: " + newActivityName);
-                Log.d(tag, "new activity type: " + newActitivtyType);
-                break;
-            case "BasicTask":
-                createActivityIntent.putExtra("newActivityName", newActivityName);
-                createActivityIntent.putExtra("newActivityDescription", newActivityDescription);
-                createActivityIntent.putExtra("newActitivtyType", newActitivtyType);
-                Log.d(tag, "new activity name: " + newActivityName);
-                Log.d(tag, "new activity type: " + newActitivtyType);
-                break;
-            case "DeadlineTask":
-
-                Log.d(tag, "new activity name: " + newActivityName);
-                Log.d(tag, "new activity type: " + newActitivtyType);
-                break;
-            default:
-                break;
-        }
-        sendBroadcast(createActivityIntent);
-    }
-
     public class Receptor extends BroadcastReceiver {
         @Override
         public final void onReceive(final Context context, final Intent intent) {
             Log.d(tag, "onReceive From createactivity");
             if (intent.getAction().equals(GestorArbreActivitats.CREATE_ACTIVITY_DONE)) {
-                finish();
+                Intent backToActivityList = new Intent(CreateActivity.this,
+                        LlistaActivitatsActivity.class);
+                startActivity(backToActivityList);
             }
             Log.i(tag, "onReceive From createactivity end");
         }

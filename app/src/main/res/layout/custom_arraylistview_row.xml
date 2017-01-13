@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/customArrayListViewRow"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/expand_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/expand_image_button" />
 
     <TextView
 
@@ -9,17 +19,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
         android:paddingLeft="8dp"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_toEndOf="@+id/expand_image_button" />
 
     <ToggleButton
-        android:id="@+id/toggleIntervalButton"
+        android:id="@+id/ToggleIntervalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:text="Add" />
+        android:layout_marginRight="5dp"
+        android:textOn="Start"
+        android:textOff="Stop"
+        android:text="Add"
+        android:layout_alignTop="@+id/list_item_string"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

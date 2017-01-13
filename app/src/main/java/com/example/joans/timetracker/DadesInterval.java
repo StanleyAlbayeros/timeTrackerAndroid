@@ -55,9 +55,9 @@ public class DadesInterval implements Serializable {
      * @param inter l'interval
      */
     public DadesInterval(final Interval inter) {
-        dataInicial = inter.getDataInicial();
-        dataFinal = inter.getDataFinal();
-        durada = inter.getDurada();
+        dataInicial = inter.getStartDate();
+        dataFinal = inter.getEndDate();
+        durada = inter.getLength();
     }
 
     /**

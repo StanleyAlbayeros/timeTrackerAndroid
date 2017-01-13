@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import nucli.Activity;
+import nucli.BasicTask;
+import nucli.Project;
 import nucli.Task;
 
 
@@ -38,6 +40,26 @@ public class DadesActivitat implements Serializable {
 
     private String activityEmoji;
     private String activeEmoji;
+
+    public int getCurrentDrawableID() {
+        return currentDrawableID;
+    }
+
+    public void setCurrentDrawableID(int currentDrawableID) {
+        this.currentDrawableID = currentDrawableID;
+    }
+
+    private int currentDrawableID;
+
+    public Boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void toggleExpanded() {
+        isExpanded = !isExpanded;
+    }
+
+    private Boolean isExpanded;
 
     /**
      * @see Activity
@@ -87,7 +109,7 @@ public class DadesActivitat implements Serializable {
     /**
      * Per tal d'identificar el tipus d'activitat en la interfase d'usuari.
      */
-    private boolean isTasca;
+    private boolean isBasicTask;
 
     /**
      * La interfase d'usuari ho necessita saber per denotar-ho i també per
@@ -100,9 +122,9 @@ public class DadesActivitat implements Serializable {
      * Extreu les dades de la activitat passada per paràmetre i les copia als
      * atributs propis.
      *
-     * @param act Task o projecte.
+     * @param activity Task o projecte.
      */
-    public DadesActivitat(final Activity act) {
+    public DadesActivitat(final Activity activity) {
         /**
          * Factor de conversió
          */
@@ -113,15 +135,16 @@ public class DadesActivitat implements Serializable {
          */
         final long segonsPerMinut = 60;
 
-        dataInicial = act.getStartDate();
-        dataFinal = act.getEndDate();
-        durada = act.getLength();
-        nom = act.getName();
-        descripcio = act.getDescription();
+        dataInicial = activity.getStartDate();
+        dataFinal = activity.getEndDate();
+        durada = activity.getLength();
+        nom = activity.getName();
+        descripcio = activity.getDescription();
         hores = (long) (durada / segonsPerHora);
         minuts = (long) ((durada - hores * segonsPerHora) / segonsPerMinut);
         segons = (long) (durada - segonsPerHora * hores
                 - segonsPerMinut * minuts);
+        isExpanded = false;
 
         int activeEmojiUnicode = 0x1F3C3;
         activeEmoji = new String(Character.toChars(activeEmojiUnicode));
@@ -129,17 +152,22 @@ public class DadesActivitat implements Serializable {
         projectEmoji = new String(Character.toChars(projectEmojiUnicode));
         int taskEmojiUnicode = 0x1F537;
         taskEmoji = new String(Character.toChars(taskEmojiUnicode));
+        currentDrawableID = android.R.drawable.arrow_down_float;
 
-
-        if (act.getClass().getName().endsWith("Project")) {
+        if (activity instanceof Project) {
             isProjecte = true;
-            isTasca = false;
+            isBasicTask = false;
             activityEmoji = projectEmoji;
+        } else if (activity instanceof BasicTask) {
+            isProjecte = false;
+            isBasicTask = true;
+            activityEmoji = taskEmoji;
+            isCronometreEngegat = ((Task) activity).isCronometreEngegat();
         } else {
             isProjecte = false;
-            isTasca = true;
+            isBasicTask = false;
             activityEmoji = taskEmoji;
-            isCronometreEngegat = ((Task) act).isCronometreEngegat();
+            isCronometreEngegat = ((Task) activity).isCronometreEngegat();
         }
     }
 
@@ -152,14 +180,21 @@ public class DadesActivitat implements Serializable {
      *
      * @return nom i durada de la activitat, en format hores, minuts i segons.
      */
-    @Override
+    // @Override
     public final String toString() {
         String str = activityEmoji + nom;
         String strdurada;
-        if (durada > 0) {
-            if (isCronometreEngegat()) {
-                str += activeEmoji;
+        if (isCronometreEngegat()) {
+            str += activeEmoji;
+            if (isExpanded) {
+                str += "\n" + descripcio + "\n";
             }
+        }
+        if (isExpanded) {
+            str += "\n" + descripcio + "\n";
+        }
+        if (durada > 0) {
+
             strdurada = "\n" + hores + "h " + minuts + "m " + segons + "s";
         } else {
             strdurada = "0s";
@@ -253,12 +288,12 @@ public class DadesActivitat implements Serializable {
     }
 
     /**
-     * Getter de <code>isTasca</code>.
+     * Getter de <code>isBasicTask</code>.
      *
-     * @return {@link #isTasca}.
+     * @return {@link #isBasicTask}.
      */
-    public final boolean isTasca() {
-        return isTasca;
+    public final boolean isBasicTask() {
+        return isBasicTask;
     }
 
     /**

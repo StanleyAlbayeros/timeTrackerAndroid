@@ -30,4 +30,35 @@ public class Project extends Activity {
         this.activityList = nactivityList;
     }
 
+    public ArrayList<Task> getTaskList() {
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        boolean noTasks = true;
+        for (Activity currentActivity : this.getActivityList()) {
+            //if the current activity falls under any task categor and has this project as father
+            // add it to the task list.
+            if (((currentActivity.getClass() == Task.class)
+                    || (currentActivity.getClass() == BasicTask.class)
+                    || (currentActivity.getClass() == DeadlineTask.class))
+                    && (currentActivity.father == this)) {
+                tasks.add((Task) currentActivity);
+                noTasks = false;
+            }
+            if (noTasks) {
+                return null;
+            }
+        }
+        return tasks;
+    }
+
+    public ArrayList<Project> getProjectTree() {
+        ArrayList<Project> tree = new ArrayList<Project>();
+        for (Activity currentActivity : this.getActivityList()) {
+            if (currentActivity.getClass() == Project.class) {
+                tree.add((Project) currentActivity);
+                tree.addAll(((Project) currentActivity).getProjectTree());
+            }
+        }
+        return tree;
+    }
+
 }

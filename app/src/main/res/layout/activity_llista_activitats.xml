@@ -9,23 +9,37 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.joans.timetracker.LlistaActivitatsActivity">
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewActivitats"
-        tools:listitem="@android:layout/simple_list_item_2"
-        android:theme="@android:style/TextAppearance.Material.Small"
-        tools:targetApi="lollipop" />
 
-    <Button
-        android:text="+"
-        android:layout_width="wrap_content"
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewActivitats"
+            tools:listitem="@android:layout/simple_list_item_2"
+            android:theme="@android:style/TextAppearance.Material.Small"
+            tools:targetApi="lollipop" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/createActivityButton"
-        style="@style/Widget.Design.FloatingActionButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="466dp" />
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="+"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|right"
+
+            android:id="@+id/createActivityButton"
+            style="@style/Widget.Design.FloatingActionButton" />
+    </LinearLayout>
 
 </RelativeLayout>

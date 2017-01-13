@@ -15,7 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import static android.R.attr.id;
 
 
 /**
@@ -86,12 +87,13 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
      * en els TextView (controls de text) de la llista ListView.
      */
     private ArrayAdapter<DadesActivitat> aaAct;
+    private ArrayListWithButtonAdapter myArrayAdapter;
 
     /**
      * Llista de dades de les activitats (projectes i tasques) mostrades
      * actualment, filles del (sub)projecte on estem posicionats actualment.
      */
-    private List<DadesActivitat> llistaDadesActivitats;
+    private ArrayList<DadesActivitat> llistaDadesActivitats;
 
     /**
      * Identificador del View les propietats del qual (establertes amb l'editor
@@ -152,12 +154,12 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
                 ArrayList<DadesActivitat> llistaDadesAct =
                         (ArrayList<DadesActivitat>) intent
                                 .getSerializableExtra("llista_dades_activitats");
-                aaAct.clear();
+                myArrayAdapter.clear();
                 for (DadesActivitat dadesAct : llistaDadesAct) {
-                    aaAct.add(dadesAct);
+                    myArrayAdapter.add(dadesAct);
                 }
                 // això farà redibuixar el ListView
-                aaAct.notifyDataSetChanged();
+                myArrayAdapter.notifyDataSetChanged();
                 Log.d(tag, "mostro els fills actualitzats");
             } else {
                 // no pot ser
@@ -299,7 +301,9 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
         aaAct = new ArrayAdapter<DadesActivitat>(this, layoutID,
                 llistaDadesActivitats);
 
-        arrelListView.setAdapter(aaAct);
+        myArrayAdapter = new ArrayListWithButtonAdapter(llistaDadesActivitats, this);
+
+        arrelListView.setAdapter(myArrayAdapter);
 
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
@@ -313,7 +317,7 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
                 /////////////////////////////////////
 
                 Intent createActivityIntent = new Intent(LlistaActivitatsActivity.this,
-                        CreateActivity.class);
+                        ChooseReportCreate.class);
                 startActivity(createActivityIntent);
             }
         };
@@ -338,7 +342,7 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
                     sendBroadcast(new Intent(
                             LlistaActivitatsActivity.DONAM_FILLS));
                     Log.d(tag, "enviat intent DONAM_FILLS");
-                } else if (llistaDadesActivitats.get(pos).isTasca()) {
+                } else if (llistaDadesActivitats.get(pos).isBasicTask()) {
                     startActivity(new Intent(LlistaActivitatsActivity.this,
                             LlistaIntervalsActivity.class));
                     // en aquesta classe ja es demanara la llista de fills
@@ -358,7 +362,7 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
                 Log.i(tag, "onItemLongClick");
                 Log.d(tag, "pos = " + pos + ", id = " + id);
 
-                if (llistaDadesActivitats.get(pos).isTasca()) {
+                if (llistaDadesActivitats.get(pos).isBasicTask()) {
                     Intent inte;
                     if (!llistaDadesActivitats.get(pos).isCronometreEngegat()) {
                         inte = new Intent(LlistaActivitatsActivity.ENGEGA_CRONOMETRE);
@@ -508,5 +512,47 @@ public class LlistaActivitatsActivity extends AppCompatActivity {
             Log.v(tag, newConfig.toString());
         }
     }
+
+    public void toggleInterval(int pos, Boolean nextState, int id) {
+        Log.i(tag, "toggling interval to " + nextState.toString());
+        Log.d(tag, "pos = " + pos + ", id = " + id);
+
+        Intent inte;
+        if (nextState) {
+            inte = new Intent(LlistaActivitatsActivity.ENGEGA_CRONOMETRE);
+            Log.d(tag, "enviat intent ENGEGA_CRONOMETRE de "
+                    + llistaDadesActivitats.get(pos).getNom());
+        } else {
+            inte = new Intent(
+                    LlistaActivitatsActivity.PARA_CRONOMETRE);
+            Log.d(tag, "enviat intent PARA_CRONOMETRE de "
+                    + llistaDadesActivitats.get(pos).getNom());
+        }
+        inte.putExtra("posicio", pos);
+        sendBroadcast(inte);
+    }
+
+
+    public void goDeeper(int pos) {
+        Log.i(tag, "onItemClick");
+        Log.d(tag, "pos = " + pos + ", id = " + id);
+
+        Intent inte = new Intent(LlistaActivitatsActivity.BAIXA_NIVELL);
+        inte.putExtra("posicio", pos);
+        sendBroadcast(inte);
+        if (llistaDadesActivitats.get(pos).isProjecte()) {
+            sendBroadcast(new Intent(
+                    LlistaActivitatsActivity.DONAM_FILLS));
+            Log.d(tag, "enviat intent DONAM_FILLS");
+        } else if (llistaDadesActivitats.get(pos).isBasicTask()) {
+            startActivity(new Intent(LlistaActivitatsActivity.this,
+                    LlistaIntervalsActivity.class));
+            // en aquesta classe ja es demanara la llista de fills
+        } else {
+            // no pot ser!
+            assert false : "activitat que no es projecte ni tasca";
+        }
+    }
+
 
 }

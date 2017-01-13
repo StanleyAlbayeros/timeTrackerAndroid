@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import nucli.Activity;
+import nucli.BasicTask;
+import nucli.DeadlineTask;
 import nucli.Interval;
 import nucli.Project;
 /*
@@ -29,6 +31,11 @@ Veure comentari de la classe Actualitzador
 import nucli.Clock;
 import nucli.Task;
 import nucli.TimePeriod;
+import reports.Formatting;
+import reports.HtmlFormatting;
+import reports.Report;
+import reports.SimplifiedReport;
+import reports.TxtFormatting;
 
 
 /**
@@ -92,6 +99,8 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
     public static final String TE_FILLS = "Te_fills";
     public static final String CREATE_ACTIVITY = "Create_activity";
     public static final String CREATE_ACTIVITY_DONE = "Create_activity_done";
+    public static final String CREATE_REPORT = "Create_report";
+    public static final String CREATE_REPORT_DONE = "Create_report_done";
 
     /**
      * Usada a {@link onCreate} i {@link carregaArbreActivitats} per crear un o
@@ -199,9 +208,9 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
                 Project proj1 = new Project("Enginyeria del software 2",
                         "primer projecte", arrel);
                 new Project("Visió artificial", "segon projecte", arrel);
-                new Task("Anar a buscar carnet biblio", "tercera tasca", arrel);
-                new Task("Instal·lar Eclipse", "primera tasca", proj1);
-                new Task("Estudiar patrons", "segona tasca", proj1);
+                new BasicTask("Anar a buscar carnet biblio", "tercera tasca", arrel);
+                new BasicTask("Instal·lar Eclipse", "primera tasca", proj1);
+                new BasicTask("Estudiar patrons", "segona tasca", proj1);
                 Log.d(tag, "Arbre de mostra petit i sense intervals creat");
                 break;
             case ferArbreGran:
@@ -308,6 +317,7 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
         filter.addAction(LlistaActivitatsActivity.PARA_SERVEI);
         filter.addAction(LlistaIntervalsActivity.PUJA_NIVELL);
         filter.addAction(CreateActivity.CREATE_ACTIVITY);
+        filter.addAction(CreateReport.CREATE_REPORT);
         receptor = new Receptor();
         registerReceiver(receptor, filter);
 
@@ -508,15 +518,64 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
 
                 createNewActivity(newActivityType, newActivityName, newActivityDescription, deadline);
 
+            } else if (accio.equals(CreateReport.CREATE_REPORT)) {
+                createReport();
             } else {
                 Log.d(tag, "accio desconeguda!");
             }
             Log.d(tag, "final de onReceive");
         }
+
+        private void createReport() {
+//TODO a real switch case with putextras from the createreport screen
+/*
+            String reportContent = new String();
+            Formatting txt;
+            try {
+                txt = new TxtFormatting("le");
+                String reportTitle = "project report";
+                Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
+                        reportTitle,
+                        ((Project) currentFatherActivity).getActivityList());
+
+                reportContent = txtReport.writeReport(txt);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            Intent answer = new Intent(CreateReport.CREATE_REPORT_DONE);
+            answer.putExtra("reportContent", reportContent);
+            sendBroadcast(answer);
+
+        }
+
+         */
+
+            String reportContent = new String();
+            Formatting txt;
+            try {
+                Formatting html = new HtmlFormatting("no");
+                String reportTitle = "simple project report";
+                Report txtReport = new SimplifiedReport(((Project) currentFatherActivity),
+                        reportTitle,
+                        ((Project) currentFatherActivity).getActivityList());
+
+                reportContent = txtReport.writeReport(html);
+
+                System.out.println(reportContent);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            Intent answer = new Intent(CreateReport.CREATE_REPORT_DONE);
+            answer.putExtra("reportContent", reportContent);
+            sendBroadcast(answer);
+
+        }
     }
 
-    private void createNewActivity(String activityType, String activityName,
-                                   String activityDescription, Date deadline) {
+    public void createNewActivity(String activityType, String activityName,
+                                  String activityDescription, Date deadline) {
 
 
 //        new Project(activityName, activityDescription, (Project) currentFatherActivity);
@@ -527,15 +586,30 @@ public class GestorArbreActivitats extends Service implements Actualitzable {
         switch (activityType) {
             case "Project":
                 Log.d(tag, "creating a project");
-                new Project(activityName, activityDescription, (Project) currentFatherActivity);
+                new Project(activityName,
+                        activityDescription,
+                        (Project) currentFatherActivity);
                 break;
             case "BasicTask":
 
                 Log.d(tag, "creating a basic task");
-                new Task(activityName, activityDescription, (Project) currentFatherActivity);
+                new BasicTask(activityName,
+                        activityDescription,
+                        (Project) currentFatherActivity);
                 break;
             case "DeadlineTask":
-                //TODO
+                Log.d(tag, "creating a deadline task");
+                Log.d(tag, "deadline task has a deadline in: " + deadline.toString());
+
+                Task tmpTask = new DeadlineTask(activityName,
+                        activityDescription,
+                        (Project) currentFatherActivity,
+                        deadline);
+                tmpTask.startTaskInterval(rellotge);
+                Log.d(tag, "engego cronometre de "
+                        + tmpTask.getName());
+                tasquesCronometrantse.add(tmpTask);
+                actualitzadorIU.engega();
                 break;
             default:
                 break;

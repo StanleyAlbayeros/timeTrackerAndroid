@@ -25,6 +25,12 @@
         <activity android:name=".CreateActivity">
 
         </activity>
+        <activity android:name=".ChooseReportCreate">
+
+        </activity>
+        <activity android:name=".CreateReport">
+
+        </activity>
 
         <service
             android:name="GestorArbreActivitats"

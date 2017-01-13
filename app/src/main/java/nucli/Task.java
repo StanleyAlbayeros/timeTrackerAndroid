@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
-public class Task extends Activity {
+public abstract class Task extends Activity {
     private ArrayList<Interval> intervalList = new ArrayList<>();
+    private boolean isTaskInitialized;
 
     public ArrayList<Interval> getIntervalList() {
         return intervalList;
@@ -25,9 +26,13 @@ public class Task extends Activity {
         this.intervalList = intervalList;
     }
 
+    public boolean isTaskInitialized() {
+        return isTaskInitialized;
+    }
     public void startTaskInterval(Clock rellotge) {
         if (!isCronometreEngegat()) { // pre-condicio: la tasca no es pot estar ja cronometrant
             cronometreEngegat = true;
+            isTaskInitialized = true;
             Date horaActual = rellotge.getCurrentDate();
             // si es la primera vegada que cronometrem la tasca cal crear el seu
             // TimePeriod i el mateix respecte els seus projectes antecessors
@@ -51,6 +56,10 @@ public class Task extends Activity {
 
     public Task(String nom, String descr, Project father) {
         super(nom, descr, father, father.getActivityList());
+    }
+
+    public void setCronometreEngegat(boolean cronometreEngegat) {
+        this.cronometreEngegat = cronometreEngegat;
     }
 
     private boolean cronometreEngegat;

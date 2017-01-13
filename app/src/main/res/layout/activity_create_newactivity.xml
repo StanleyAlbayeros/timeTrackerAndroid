@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -16,7 +16,7 @@
             android:id="@+id/TextViewTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/create_activity"
+            android:text="@string/create_Activity"
             android:textSize="10pt">
 
         </TextView>
@@ -63,7 +63,7 @@
             android:layout_height="51dp"
             android:entries="@array/createActivityList"
             android:gravity="center_vertical"
-            android:prompt="@string/create_activity">
+            android:prompt="@string/create_Activity">
 
         </Spinner>
 
@@ -75,4 +75,4 @@
 
         </Button>
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

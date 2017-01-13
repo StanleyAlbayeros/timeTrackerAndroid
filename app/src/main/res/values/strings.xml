@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">TimeTracker</string>
 
-    <string name="create_activity">Create Activity</string>
+    <string name="create_Activity">Create Activity</string>
+    <string name="create_Report">Create Report</string>
     <string name="createActivityName">Activity Name</string>
     <string name="createActivityDescription">Activity Description</string>
     <string name="deadline">Task deadline</string>

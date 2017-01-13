@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Random;
 
 import nucli.Activity;
+import nucli.BasicTask;
 import nucli.Interval;
 import nucli.TimePeriod;
 import nucli.Project;
@@ -189,7 +190,7 @@ public class ArbreAleatori {
                             + projPare.getName());
         } else {
             // faig una task filla i els seus intervals
-            Task task = new Task("T " + nom, descr, projPare);
+            Task task = new BasicTask("T " + nom, descr, projPare);
             Log.d(tag,
                     "faig task " + task.getName() + " filla de "
                             + projPare.getName());
@@ -261,13 +262,13 @@ public class ArbreAleatori {
             Task task = (Task) actArrel;
             task.setTimePeriod(new TimePeriod(null));
             for (Interval inter : task.getIntervalList()) {
-                if (inter.getDataInicial().before(di)) {
-                    di = inter.getDataInicial();
+                if (inter.getStartDate().before(di)) {
+                    di = inter.getStartDate();
                 }
-                if (inter.getDataFinal().after(df)) {
-                    df = inter.getDataFinal();
+                if (inter.getEndDate().after(df)) {
+                    df = inter.getEndDate();
                 }
-                durada += inter.getDurada();
+                durada += inter.getLength();
             }
         }
         actArrel.setStartDate(di);
